@@ -2,27 +2,31 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { FaClosedCaptioning } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import GoogleLogin from "@/components/Shared/GoogleLogin";
 
 const SignInPage = () => {
   const router = useRouter()
+    // const searchParams = useSearchParams()
+    // const path = searchParams.get("redirect")
   const handleLogin =async (e) => {
+  
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
     const user = { email, password };
     console.log(user);
-
+    
     // login user by next js 
     const res = await signIn("credentials", {
       email,
       password,
-      redirect:false
+      redirect:true,
+      // callbackUrl: path?path:"/"
     });
     console.log(res);
     if(res.status===200){
@@ -30,6 +34,7 @@ const SignInPage = () => {
     }
   };
   return (
+    <Suspense fallback={<div>Loading</div>}>
     <div>
       <div className="hero my-10 ">
         <div className="hero-content flex-col lg:flex-row">
@@ -93,6 +98,7 @@ const SignInPage = () => {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 };
 

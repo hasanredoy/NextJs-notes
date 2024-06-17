@@ -9,7 +9,7 @@ import { FaDollarSign, FaArrowAltCircleRight } from "react-icons/fa";
 const Services = () => {
   const [services, setServices] = useState();
   useEffect(() => {
-    fetch("http://localhost:3000/services/api/get-services")
+    fetch(`http://localhost:3000/services/api/get-services`)
       .then((res) => res.json())
       .then((data) => setServices(data));
   }, []);

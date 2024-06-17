@@ -1,10 +1,12 @@
 "use client"
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 const MyBookingPage = () => {
   const session =useSession()
   const [booking , setBooking]=useState([])
+  const [dlete, setDelete]=useState()
   useEffect(()=>{
     fetch(`http://localhost:3000/my-booking/api/${session?.data?.user?.email}`)
     .then(res => res.json())
@@ -12,7 +14,18 @@ const MyBookingPage = () => {
       console.log(data);
       setBooking(data)
     })
-  },[session?.data?.user?.email])
+  },[session?.data?.user?.email,dlete])
+  const handleDelete=async(id)=>{
+    console.log(id);
+    const res =await fetch(`http://localhost:3000/my-booking/api/booking-methods/${id}`,{
+      method:"DELETE"
+    })
+    const rsp = await res.json()
+    if(rsp?.getBooking.deletedCount>0){
+      setDelete(delete+1)
+    }
+    console.log({rsp});
+  }
   return (
     <div className="text-black overflow-x-auto mx-auto my-10 rounded-md bg-gray-300">
        
@@ -53,11 +66,14 @@ const MyBookingPage = () => {
             </td>
             <th>
              <div className=' flex gap-3'>
-             <button
+            <Link href={`/my-booking/${singleBooking?._id}`}>
+            <button
              className=" btn bg-[#04630a] text-white border-l-4 border-b-4 border-[#2efed8]">
                  edit
                 </button>
+            </Link>
              <button
+             onClick={()=>handleDelete(singleBooking?._id)}
              className=" btn btn-primary">
                  delete
                 </button>

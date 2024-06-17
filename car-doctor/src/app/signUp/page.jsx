@@ -25,7 +25,7 @@ const SignUpPage = () => {
     console.log(res);
    if(res.status===200){
     e.target.reset()
-    Router.push('/signin')
+    router.push('/signin')
    }
   };
   return (
